@@ -1,3 +1,6 @@
 # FlappyDelphi
-There is my implementation of flappy bird in Delphi
-To play all what you need is SPACE key, to exit use ESC.
+There is my implementetion of flappy bird in Delphi.
+![pelda](./assets/sprite/2.gif)
+## Using 
+You can compile that project in Delphi or use already compild in folder win.
+To play everything what you need is SPACE key, to quit just press ESC
