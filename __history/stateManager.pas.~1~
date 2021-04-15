@@ -1,0 +1,41 @@
+unit stateManager;
+
+interface
+
+uses
+  Classes, SysUtils, Graphics, Vcl.Dialogs, Math;
+
+  type
+    TState = class
+    public
+      constructor Create();
+      procedure Play;
+      procedure Draw;
+      procedure nextState;
+  end;
+
+implementation
+
+{ TState }
+
+constructor TState.Create;
+begin
+
+end;
+
+procedure TState.Draw;
+begin
+
+end;
+
+procedure TState.nextState;
+begin
+
+end;
+
+procedure TState.Play;
+begin
+
+end;
+
+end.

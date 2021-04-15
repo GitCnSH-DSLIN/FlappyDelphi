@@ -1,0 +1,154 @@
+unit stateManager;
+
+interface
+
+uses
+  Classes, SysUtils, Graphics, Vcl.ExtCtrls, Math, Objects;
+
+type
+  TState = class
+  private
+    placeToDraw: TImage;
+    player: TPlayer;
+    base: TStatics;
+    background: TStatics;
+  public
+    constructor Create(MainImage: TImage; player0: TPlayer; base0, background0 : TStatics); overload;
+  end;
+
+  TStartState = class(TState)
+  public
+    constructor Create(MainImage: TImage; player0: TPlayer; base0, background0 : TStatics);
+    procedure Play;
+    procedure Draw;
+  end;
+
+  TGameState = class(TState)
+  private
+    pipes: TTube;
+    score: integer;
+  public
+    constructor Create(MainImage: TImage; player0: TPlayer; base0, background0 : TStatics; pipes0: TTube);
+    procedure Play;
+    procedure CollisionDetection;
+    procedure lucklyPassing;
+    procedure move;
+    procedure Draw;
+  end;
+
+  TGameLose = class(TGameState)
+  public
+    constructor Create(MainImage: TImage; player0: TPlayer; base0, background0 : TStatics; pipes0: TTube);
+    procedure Draw;
+    procedure Play;
+  end;
+
+  TStateList = array [0..2] of TState;
+
+implementation
+
+
+
+{ TStartState }
+
+constructor TStartState.Create(MainImage: TImage; player0: TPlayer; base0, background0 : TStatics);
+begin
+  inherited;
+end;
+
+procedure TStartState.Draw;
+begin
+  placeToDraw.Canvas.Draw(background.getX, background.gety, background.getBitmap);
+  placeToDraw.Canvas.Draw(base.getX, base.getY, base.getBitmap);
+  placeToDraw.Canvas.Draw(player.getX, player.gety, player.getBitmap);
+end;
+
+procedure TStartState.Play;
+begin
+  Draw;
+end;
+
+{ TState }
+
+constructor TState.Create(MainImage: TImage; player0: TPlayer; base0,
+  background0: TStatics);
+begin
+  placeToDraw := MainImage;
+  player := player0;
+  base := base0;
+  background := background0;
+end;
+
+{ TGameState }
+
+constructor TGameState.Create(MainImage: TImage; player0: TPlayer; base0, background0 : TStatics; pipes0: TTube);
+begin
+  inherited Create(MainImage, player0, base0, background0);
+  pipes := pipes0;
+  score := 0;
+end;
+
+procedure TGameState.CollisionDetection;
+begin
+  if (player.getX + 34 > pipes.getXTop) and (player.getX < pipes.getXTop + 52) and ((player.getY + 24 > pipes.getYTop) and (player.getY < pipes.getYTop + 320) or ((player.getY + 24 > pipes.getYBottom) and (player.getY < pipes.getYBottom + 320))) then
+    player.popodos := True
+  else player.popodos := False;
+end;
+
+procedure TGameState.Draw;
+begin
+  placeToDraw.Canvas.Draw(background.getX, background.gety, background.getBitmap);
+  placeToDraw.Canvas.Draw(pipes.getXTop, pipes.getYTop, pipes.getBitmap(0));
+  placeToDraw.Canvas.Draw(pipes.getXBottom, pipes.getYBottom, pipes.getBitmap(1));
+  placeToDraw.Canvas.Draw(base.getX, base.getY, base.getBitmap);
+  placeToDraw.Canvas.Draw(player.getX, player.gety, player.getBitmap);
+  placeToDraw.Canvas.TextOut(124, 60, intToStr(score));
+end;
+
+procedure TGameState.lucklyPassing;
+begin
+  if (player.getX + 34 = pipes.getXTop) then
+  score := score + 1;
+end;
+
+procedure TGameState.move;
+begin
+  if player.jump then
+    player.jumping;
+  player.move;
+  pipes.move;
+end;
+
+procedure TGameState.Play;
+begin
+  move;
+  CollisionDetection;
+  lucklyPassing;
+  Draw;
+end;
+
+{ TGameLose }
+
+constructor TGameLose.Create(MainImage: TImage; player0: TPlayer; base0,
+  background0: TStatics; pipes0: TTube);
+begin
+  inherited;
+end;
+
+procedure TGameLose.Draw;
+begin
+  placeToDraw.Canvas.Draw(background.getX, background.gety, background.getBitmap);
+  placeToDraw.Canvas.Draw(pipes.getXTop, pipes.getYTop, pipes.getBitmap(0));
+  placeToDraw.Canvas.Draw(pipes.getXBottom, pipes.getYBottom, pipes.getBitmap(1));
+  placeToDraw.Canvas.Draw(base.getX, base.getY, base.getBitmap);
+  placeToDraw.Canvas.Draw(player.getX, player.gety, player.getBitmap);
+  placeToDraw.Canvas.TextOut(124, 60, intToStr(score));
+  placeToDraw.Canvas.TextOut(70, 200, 'lose');
+end;
+
+procedure TGameLose.Play;
+begin
+  Draw;
+end;
+
+end.

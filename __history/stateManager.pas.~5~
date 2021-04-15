@@ -1,0 +1,61 @@
+unit stateManager;
+
+interface
+
+uses
+  Classes, SysUtils, Graphics, Vcl.ExtCtrls, Math, Objects;
+
+type
+  TState = class
+  private
+    placeToDraw: TImage;
+    player: TPlayer;
+    base: TStatics;
+    background: TStatics;
+  public
+    constructor Create(MainImage: TImage; player0: TPlayer; base0, background0 : TStatics); overload;
+  end;
+
+  TStartState = class(TState)
+  public
+    constructor Create(MainImage: TImage; player0: TPlayer; base0, background0 : TStatics);
+    procedure Play;
+    procedure Draw;
+  end;
+
+  TStateList = array [0..2] of TState;
+
+implementation
+
+
+
+{ TStartState }
+
+constructor TStartState.Create(MainImage: TImage; player0: TPlayer; base0, background0 : TStatics);
+begin
+  inherited;
+end;
+
+procedure TStartState.Draw;
+begin
+  placeToDraw.Canvas.Draw(base.getX, base.getY, base.getBitmap);
+  placeToDraw.Canvas.Draw(player.getX, player.gety, player.getBitmap);
+end;
+
+procedure TStartState.Play;
+begin
+  Draw;
+end;
+
+{ TState }
+
+constructor TState.Create(MainImage: TImage; player0: TPlayer; base0,
+  background0: TStatics);
+begin
+  placeToDraw := MainImage;
+  player := player0;
+  base := base0;
+  background := background0;
+end;
+
+end.
