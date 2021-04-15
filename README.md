@@ -1,5 +1,6 @@
 # FlappyDelphi
 There is my implementetion of flappy bird in Delphi.
+.
 ![pelda](./assets/sprite/2.gif)
 ## Using 
 You can compile that project in Delphi or use already compild in folder win.
